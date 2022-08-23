@@ -1,18 +1,26 @@
 package microservices.book.multiplication.domain;
 
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
-@Data
+@RequiredArgsConstructor
+@Getter
 @ToString
-public class Multiplication {
+@EqualsAndHashCode
+public final class Multiplication {
 
     // 인수
-    private int factorA;
-    private int factorB;
+    private final int factorA;
+    private final int factorB;
 
     // A * B 의 결과
-    private int result;
+    private final int result;
+
+    Multiplication() {
+        this(0,0);
+    }
 
     public Multiplication(int factorA, int factorB) {
         this.factorA = factorA;
