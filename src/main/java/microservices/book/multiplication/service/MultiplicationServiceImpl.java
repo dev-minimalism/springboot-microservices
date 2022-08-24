@@ -4,6 +4,7 @@ import microservices.book.multiplication.domain.Multiplication;
 import microservices.book.multiplication.domain.MultiplicationResultAttempt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 @Service
 class MultiplicationServiceImpl implements MultiplicationService {
@@ -23,9 +24,16 @@ class MultiplicationServiceImpl implements MultiplicationService {
     }
 
     @Override
-    public boolean checkAttempt(final MultiplicationResultAttempt resultAttempt) {
-        return resultAttempt.getResultAttempt() ==
-            resultAttempt.getMultiplication().getFactorA()
-                * resultAttempt.getMultiplication().getFactorB();
+    public boolean checkAttempt(final MultiplicationResultAttempt attempt) {
+        boolean correct = attempt.getResultAttempt() ==
+            attempt.getMultiplication().getFactorA()
+                * attempt.getMultiplication().getFactorB();
+
+        Assert.isTrue(!attempt.isCorrect(), "채점한 상태로 보낼 수 없습니다!!");
+
+        MultiplicationResultAttempt checkedAttempt = new MultiplicationResultAttempt(
+            attempt.getUser(), attempt.getMultiplication(), attempt.getResultAttempt(), correct);
+
+        return correct;
     }
 }
